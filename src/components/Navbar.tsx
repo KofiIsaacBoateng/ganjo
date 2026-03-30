@@ -9,14 +9,15 @@ const Navbar = () => {
         trigger: "nav",
         start: "bottom top",
       },
+      yoyo: true,
     });
 
     tween.fromTo(
       "nav",
       { backgroundColor: "transparent" },
       {
-        backgroundColor: "#00000050",
-        backdropFilter: "blur(10px)",
+        backgroundColor: "#00000020",
+        backdropFilter: "blur(5px)",
         duration: 1,
         ease: "power1.inOut",
       },

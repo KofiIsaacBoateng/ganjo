@@ -1,13 +1,70 @@
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { SplitText } from "gsap/all";
 import { useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 
 const Hero = () => {
-  const videoRef = useRef(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const isMobile = useMediaQuery({ maxWidth: "768px" });
+
+  useGSAP(() => {
+    const titleSplit = new SplitText(".title", { type: "chars, words" });
+    const subtitleSplit = new SplitText(".subtitle", { type: "lines" });
+    titleSplit.chars.forEach((char) => char.classList.add("text-gradient"));
+
+    gsap.from(titleSplit.chars, {
+      opacity: 0,
+      yPercent: 100,
+      duration: 1.5,
+      ease: "expo.out",
+      stagger: 0.05,
+    });
+
+    gsap.from(subtitleSplit.lines, {
+      opacity: 0,
+      yPercent: 100,
+      duration: 1.5,
+      ease: "expo.out",
+      stagger: 0.05,
+      delay: 1,
+    });
+
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: "#hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      })
+      .to(".left-leaf", { yPercent: -200 }, 0)
+      .to(".right-leaf", { yPercent: 200 }, 0);
+
+    const startValue = isMobile ? "top 50%" : "center 60%";
+    const endValue = isMobile ? "120% top" : "bottom top";
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "video",
+        start: startValue,
+        end: endValue,
+        scrub: true,
+        pin: true,
+      },
+    });
+
+    if (videoRef.current) {
+      videoRef.current.onloadedmetadata = () => {
+        tl.to(videoRef.current, { currentTime: videoRef.current?.duration }, 0);
+      };
+    }
+  }, []);
 
   return (
     <>
-      <section id="hero" className="noisy">
+      <section id="hero" className="">
         <h1 className="title">MOJITO</h1>
         <img
           src="/images/hero-left-leaf.png"
