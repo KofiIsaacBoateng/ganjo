@@ -1,6 +1,48 @@
+import { useGSAP } from "@gsap/react";
 import { openingHours, socials } from "../constants";
+import { SplitText } from "gsap/all";
+import gsap from "gsap";
 
 const Contact = () => {
+  useGSAP(() => {
+    const titleSplit = new SplitText(".content h2", { type: "words" });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#contact",
+        start: "top 50%",
+      },
+      ease: "power1.inOut",
+    });
+
+    tl.from(titleSplit.words, {
+      opacity: 0,
+      yPercent: 100,
+      duration: 1,
+      stagger: 0.1,
+    })
+      .from("#contact h3, #contact p", {
+        opacity: 0,
+        yPercent: 20,
+        duration: 1,
+        stagger: 0.2,
+      })
+      .to("#f-right-leaf", {
+        xPercent: 10,
+        yPercent: -50,
+        duration: 1,
+      })
+      .to(
+        "#f-left-leaf",
+        {
+          xPercent: -10,
+          yPercent: 50,
+          duration: 1,
+        },
+        "<",
+      );
+  });
+
   return (
     <footer id="contact">
       <img
@@ -29,7 +71,7 @@ const Contact = () => {
         </div>
 
         <div>
-          <h1>Open Every Day</h1>
+          <h3>Open Every Day</h3>
           {openingHours.map((day, index) => (
             <p key={index}>
               {day.day}: {day.time}
