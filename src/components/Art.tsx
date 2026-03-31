@@ -1,6 +1,33 @@
+import { useGSAP } from "@gsap/react";
 import { featureLists, goodLists } from "../constants";
+import gsap from "gsap";
 
 const Art = () => {
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#art",
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+        pin: true,
+      },
+    });
+
+    tl.to(".will-fade", { opacity: 0, duration: 0.5, ease: "power1.inOut" })
+      .to(".masked-img", {
+        scale: 1.3,
+        maskSize: "400%",
+        duration: 1,
+        ease: "power1.inOut",
+      })
+      .to(".masked-content", {
+        opacity: 1,
+        duration: 1,
+        ease: "power1.inOut",
+      });
+  });
+
   return (
     <div id="art">
       <div className="container mx-auto h-full pt-20">
