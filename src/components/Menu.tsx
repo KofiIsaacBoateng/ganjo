@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { sliderLists } from "../constants";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 const Menu = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -14,6 +16,20 @@ const Menu = () => {
       (currentIndex + indexOffset + sliderLists.length) % sliderLists.length
     ];
   };
+
+  useGSAP(() => {
+    gsap.fromTo("#title", { opacity: 0 }, { opacity: 1, duration: 1 });
+    gsap.fromTo(
+      ".cocktail img",
+      { opacity: 0, xPercent: -100 },
+      { opacity: 1, xPercent: 0, duration: 1 },
+    );
+    gsap.fromTo(
+      ".details h2, .details p",
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 1, stagger: 0.2 },
+    );
+  }, [currentIndex]);
 
   const currentCocktail = getCocktailAt(0);
   const nextCocktail = getCocktailAt(1);
